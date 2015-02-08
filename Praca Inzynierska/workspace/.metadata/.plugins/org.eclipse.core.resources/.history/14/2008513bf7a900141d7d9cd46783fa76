@@ -1,7 +1,0 @@
-package test.suite;
-
-@RunWith(Suite.class)
-@SuiteClasses({})
-public class TestSuite {
-
-}

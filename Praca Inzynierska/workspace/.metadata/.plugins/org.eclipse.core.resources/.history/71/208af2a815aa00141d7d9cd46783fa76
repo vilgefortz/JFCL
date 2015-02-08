@@ -1,5 +1,0 @@
-package main.application.enviroment;
-
-public class VariableNotFoundException extends Exception {
-
-}

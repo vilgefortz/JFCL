@@ -1,7 +1,0 @@
-package main.application.variables;
-
-public class InputVariableNotFoundException extends Exception {
-	public InputVariableNotFoundException(String name) {
-		super ("Output variable \"" + name + "\" not found");
-	}	
-}

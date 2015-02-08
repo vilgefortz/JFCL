@@ -1,7 +1,0 @@
-package main.application.functionblock;
-
-import java.util.ArrayList;
-
-public class Ruleblocks extends ArrayList<Ruleblock>{
-
-}

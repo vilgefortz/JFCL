@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;Icons.java&apos; to &apos;Workbench/src/org.workbench.tool&apos;&#x0D;&#x0A;- Original project: &apos;Chinchilla&apos;&#x0D;&#x0A;- Destination element: &apos;Workbench/src/org.workbench.tool&apos;&#x0D;&#x0A;- Original element: &apos;test.java.res.Icons.java&apos;" description="Copy compilation unit" destination="=Workbench/src&lt;org.workbench.tool" element1="/src&lt;test.java.res{Icons.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1403430012894" units="1" version="1.0"/>
-</session>

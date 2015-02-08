@@ -1,9 +1,0 @@
-package main.application.parser;
-
-import java.util.logging.Logger;
-
-public class Console {
-	public void log (String message) {
-		Logger.getGlobal().fine(message);
-	}
-}

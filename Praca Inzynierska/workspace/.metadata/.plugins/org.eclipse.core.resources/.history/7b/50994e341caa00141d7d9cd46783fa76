@@ -1,7 +1,0 @@
-package main.application.variables;
-
-import java.util.ArrayList;
-
-public class OutputVariables extends ArrayList<OutputVariable> {
-	
-}
