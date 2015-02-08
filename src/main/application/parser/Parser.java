@@ -33,8 +33,10 @@ public class Parser extends ParserBase {
 	}
 
 	public void parse() {
+		try {l
 		this.eraseComments();
 		app = new Application();
+		if (this.doc.length==0) return;
 		expectForce("function_block").execute(
 				p1 -> {
 					FunctionBlock fb = new FunctionBlock(app);
@@ -94,6 +96,10 @@ public class Parser extends ParserBase {
 
 				});
 		// app.saveJSON();
+		}
+		catch (Exception e) {
+			//don't have to catch any Exceptions - error handling via Error document
+		}
 		Console.printLog();
 	}
 }

@@ -22,7 +22,7 @@ public class Application {
 		System.out.println(p.app.toJson());
 		
 	}
-	private String toJson() throws FileNotFoundException {
+	public String toJson() throws FileNotFoundException {
 		
 			Gson gson = new GsonBuilder().
 					excludeFieldsWithoutExposeAnnotation().

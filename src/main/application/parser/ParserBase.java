@@ -13,14 +13,16 @@ public class ParserBase {
 	public main.application.Application app;
 	public boolean done = false;
 	public String word;
-
+	public JsonLogger logger = new JsonLogger ();
 	public ParserBase() {
 		super();
 	}
 
 	public void logInfo(String exp, String found) {
-		log("Info: Expected '" + exp + "', found '" + found + "' at line : "
-				+ countLines(pointer) + ", pos : " + pointer);
+		String info="Info: Expected '" + exp + "', found '" + found + "' at line : "
+				+ countLines(pointer) + ", pos : " + pointer;
+		
+		log(info);
 	}
 
 	public void logFatal(String exp, String found) {
