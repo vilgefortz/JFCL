@@ -1,0 +1,21 @@
+1401084114393	Rename type 'Operators'
+1401087806667	Encapsulate field 'name'
+1401088755893	Encapsulate field 'x'
+1401088759355	Encapsulate field 'y'
+1401091788816	Rename field 'pointList'
+1401132816624	Encapsulate field 'min'
+1401132820315	Encapsulate field 'max'
+1401137153000	Rename method 'getTermFactoriesOperators'
+1401191509538	Move packages
+1401216407368	Rename local variable 'arg0'
+1401217465004	Rename local variable 'args'
+1401217479063	Rename local variable 'args2'
+1401219476939	Rename local variable 'varName'
+1401219715261	Rename local variable 'args'
+1401263952185	Rename type 'StandardMathOperators'
+1401263960087	Rename type 'LinguisticOperators'
+1401270221901	Rename method 'setOperators'
+1401270682265	Move compilation unit
+1401270695332	Move compilation unit
+1401271237124	Rename type 'Operator'
+1401271248517	Rename type 'DoubleMathOperator'

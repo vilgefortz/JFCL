@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+org.eclipse.ant.ui.commentsColor=0,238,0
+org.eclipse.ant.ui.constantStringsColor=170,170,170
+org.eclipse.ant.ui.dtdColor=187,255,187
+org.eclipse.ant.ui.processingInstructionsColor=0,255,0
+org.eclipse.ant.ui.tagsColor=187,255,187
+org.eclipse.ant.ui.textColor=0,255,0
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

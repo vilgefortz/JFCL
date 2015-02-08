@@ -1,0 +1,9 @@
+1402560217326	Move compilation units
+1402565583847	Rename field 'STR_AND'
+1402565594582	Rename field 'STR_OR'
+1402565843386	Rename field 'STR_NOT'
+1402735832142	Rename method 'makeDouble'
+1402736354265	Infer generic type arguments
+1402736567663	Rename method 'valueOf'
+1402738657857	Move compilation units
+1402738663935	Delete element

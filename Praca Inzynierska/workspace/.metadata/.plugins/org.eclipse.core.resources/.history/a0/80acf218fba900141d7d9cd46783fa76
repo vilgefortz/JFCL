@@ -1,0 +1,7 @@
+package main.application.enviroment;
+
+import java.util.Observable;
+
+public class Variable extends Observable{
+	
+}

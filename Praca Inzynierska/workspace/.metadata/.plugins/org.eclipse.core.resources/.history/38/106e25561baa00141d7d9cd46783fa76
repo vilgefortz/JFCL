@@ -1,0 +1,8 @@
+package main.application.variables;
+
+import main.application.enviroment.Variable;
+
+public class InputVariable {
+	Variable main;
+	
+}

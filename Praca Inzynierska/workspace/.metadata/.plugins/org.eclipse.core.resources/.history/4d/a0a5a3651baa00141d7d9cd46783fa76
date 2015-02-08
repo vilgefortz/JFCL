@@ -1,0 +1,10 @@
+package main.application.variables;
+
+import main.application.enviroment.Variable;
+
+public class InputVariable {
+	Variable main;
+	public InputVariable (Variable main) {
+		this.main = main;
+	}
+}

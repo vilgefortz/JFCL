@@ -1,0 +1,9 @@
+Double=quoted string\=0,0,0,0,0,170,170,170
+Identifier=0,0,0,0,0,187,255,187
+Keyword=0,0,0,0,0,170,255,34
+Multi-line=comment\=0,0,0,0,0,0,238,0
+Others=0,0,0,0,0,0,255,0
+Single=quoted string\=0,0,0,0,0,170,170,170
+Single-line=comment\=0,0,0,0,0,0,238,0
+Type=0,0,0,0,0,0,255,0
+eclipse.preferences.version=1

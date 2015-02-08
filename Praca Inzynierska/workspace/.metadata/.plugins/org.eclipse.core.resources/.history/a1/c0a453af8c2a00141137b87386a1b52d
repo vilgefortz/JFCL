@@ -1,0 +1,94 @@
+package formframe;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class FormFrame {
+	public static void main(String[] args) {// funkcja testująca
+		JFrame f = new JFrame();
+
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setSize(new Dimension(300, 400));
+		f.setVisible(true);
+		Patient p = patientEditForm(f);
+		if (p != null) {
+		//wypisz na ekranie wlasciwosci pacjenta zeby sprawdzic czy metoda dobrze dziala
+		}
+	}
+
+	
+	private static Patient p; // tu oczywiscie swoja klase pacjenta
+
+	// metoda pokazuje frame z polami do uzupelnienia w celu dodania pacjenta,
+	// zwraca obiekt klasy pacjenta
+	public static Patient patientEditForm(JFrame parent) {
+		final Object mainThread = new Object();
+		final JFrame frame = new JFrame();
+		
+		//////////// dodajesz pola tekstowe do formatki, ustalasz rozmiar itepe
+		frame.setSize(new Dimension(200, 100));
+		JButton ok = new JButton("OK");
+		JButton cancel = new JButton("cancel");
+		frame.add(ok);
+		frame.add(cancel);
+		
+		
+		/////////////////////////////////////////////////
+		frame.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				frame.requestFocus();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+		});
+		ok.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				p = new Patient();
+				// TUTAJ ZBIERASZ INFORMACJE Z POL TEKSTOWYCH, SPRAWDZASZ JE,
+				// USTAWIASZ formOK na true jesli jest ok
+				// ustawiasz odpowiednio pola w obiekcie 
+
+				
+				synchronized (mainThread) {
+					mainThread.notify();
+				}
+			}
+		});
+		cancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				p = null; // jesli ktos nie chce wprowadzic pacjenta to metoda
+							// zwroci null
+				synchronized (mainThread) {
+					mainThread.notify();
+				}
+			}
+
+		});
+		
+		frame.setVisible(true);
+		synchronized (mainThread) {
+		try {
+			mainThread.wait();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		}
+		frame.dispose();
+		return p;
+	}
+}

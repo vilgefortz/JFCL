@@ -1,0 +1,17 @@
+1406287051741	Encapsulate field 'value'
+1406287055335	Encapsulate field 'ammount'
+1406287071461	Rename type 'Pair'
+1406287423288	Move compilation units
+1406287426273	Delete element
+1406288369648	Infer generic type arguments
+1406294111366	Delete element
+1406294348054	Rename type 'CharPrecentagePair'
+1406295311033	Encapsulate field 'base'
+1406297782911	Rename type 'Operations'
+1406299591085	Delete element
+1406302369875	Rename method 'precentage'
+1406302378923	Rename method 'setPrecentages'
+1406302393547	Rename field 'precentages'
+1406302440431	Rename method 'getPrecentages'
+1406302682754	Rename package 'org.vilgefortz.stringoperator'
+1406303012173	Rename type 'StringAmountPair'

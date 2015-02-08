@@ -1,0 +1,38 @@
+package main.parser.operators;
+import main.parser.ExpressionParser;
+import main.parser.exceptions.InvalidArgumentsException;
+import main.parser.variables.VariableList;
+
+
+
+public abstract class AbstractOperator {
+
+	public static final int INFINITE_ARGUMENTS = -10000000;
+	protected String name;
+	public String getName() {
+		return name;
+	}
+	public AbstractOperator (String name) {
+		this.name = name;
+	}
+	public Object op (Object args [],ExpressionParser p,VariableList var)  throws InvalidArgumentsException {
+		try {
+			return fun (args,p,var);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new InvalidArgumentsException(name, args);
+		}
+	}
+	public abstract Object fun (Object args [], ExpressionParser p, VariableList var) throws Exception;
+	
+	public abstract int argNumber ();
+	@Override
+	public boolean equals(Object arg0) {
+		return this.name.equalsIgnoreCase(((AbstractOperator)arg0).name);
+	}
+	public boolean isAcceptableArgument(Object peek) {
+		
+		return true;
+	}
+}

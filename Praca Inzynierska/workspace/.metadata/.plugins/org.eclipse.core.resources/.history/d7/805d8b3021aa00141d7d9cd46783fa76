@@ -1,0 +1,9 @@
+package main.application.functionblock;
+
+import main.application.variables.OutputVariables;
+
+public class FunctionBlock {
+	InputVariables input;
+	OutputVariables output;
+	
+}

@@ -1,0 +1,11 @@
+package main.application.enviroment;
+
+import java.util.Observable;
+
+public class Variable extends Observable{
+	public String name = "";
+	public double value = 0;
+	public Variable (String name, double value) {
+		
+	}
+}

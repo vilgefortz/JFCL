@@ -1,0 +1,173 @@
+package org.workbench.window;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.text.TabExpander;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.workbench.tool.Tool;
+import org.workbench.window.misc.Grid;
+
+
+public class ToolContainer extends ArrayList<Tool> implements ActionListener {
+	
+	///
+	//main app properties
+	public static JTabbedPane tabbedPane;
+	public static ToolContainer main=new ToolContainer ();
+	///
+	private static final String MAIN_WINDOW_NAME = "AUSSEN.V";
+	JPanel panel = new JPanel ();
+	
+	Tool dummy = new Tool ();
+	Grid grid = new Grid (5,4);
+	
+	public JTabbedPane createTabbedPane () {
+		tabbedPane=new JTabbedPane();
+		refreshTabbedPane ();
+		return tabbedPane;
+	}
+	
+	public void refreshTabbedPane() {
+		int index = tabbedPane.getSelectedIndex();
+		tabbedPane.removeAll();
+		String [] tcList = getListOfWindows();
+		ToolContainer [] containerList = new ToolContainer[tcList.length];
+		for (int i=0; i<containerList.length; i++) { 
+			containerList[i]=this.getChildToolContainer(tcList[i]);
+			tabbedPane.add(containerList[i].getPanel());
+		}
+		tabbedPane.setSelectedIndex(index);
+		tabbedPane.revalidate();
+	}
+
+	public static ToolContainer newInstance () {
+		ToolContainer tc = new ToolContainer();
+		tc.setName(MAIN_WINDOW_NAME);
+		return tc;
+	}
+	private ToolContainer() {
+		dummy=createDummy();
+		dummy.get(0).setValue(DUMMY);
+		this.add(dummy);
+	}
+	
+	private Tool createDummy() {
+		Tool dummy = new Tool();
+		dummy.get(0).setValue(DUMMY);
+		dummy.setWindowName(this.name);
+		return dummy;
+	}
+
+	public ToolContainer getChildToolContainer (String containerName) {
+		ToolContainer newContainer = new ToolContainer ();
+		for (int i=0; i<this.size();i++) {
+			if (this.get(i).getWindowName().equals(containerName)) newContainer.add(this.get(i));
+		}
+		return newContainer;
+	}
+	String name;
+	
+	public JPanel getPanel () {
+		panel.removeAll();
+		//check if there is a dummy
+		boolean isDummy = false;
+		for (Tool t:this) if (t.get(0).getValue().equals(DUMMY)) isDummy = true;
+		if (!isDummy) {
+			dummy = createDummy();
+			add(dummy);
+		}
+		panel.setLayout(new GridLayout(grid.getWidth(),grid.getHeight()));		
+		for (Tool t:this) {
+			panel.add(t.getMiniPanel());
+		}
+		panel.revalidate();
+		return panel;
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void save (String fileName) {
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			
+			// root elements
+			System.out.println (docBuilder.newDocument());
+			Document doc = docBuilder.newDocument();
+		
+			Element tools = doc.createElement("tools");
+			for (Tool t : this) {
+				t.save(tools, doc);
+			}
+		
+		
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			System.out.println ("DOC? " + doc);
+			DOMSource source = new DOMSource(doc);
+			File file = new File(fileName);
+			StreamResult result = new StreamResult(file);
+
+			// Output to console for testing
+			transformer.transform(source, result);
+
+			
+			
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (TransformerException tfe) {
+			tfe.printStackTrace();
+		}
+	}
+	
+	public void load (String fileName) {
+		
+	}
+	
+	public String[] getListOfWindows () {
+		ArrayList<String> l = new ArrayList<String> ();
+		for (Tool t : this) {
+		 if (!l.contains(t.getWindowName())) l.add(t.getWindowName());	
+		}
+		
+		return l.toArray(new String [l.size()]);
+	}
+	
+	public static void main (String [] args) {
+		
+	}
+	
+	public static final String DUMMY="DUMMY";
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}

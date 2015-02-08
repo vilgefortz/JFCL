@@ -1,0 +1,29 @@
+1400163905506	Encapsulate field 'answers'
+1400163915895	Encapsulate field 'weights'
+1400163919021	Encapsulate field 'question'
+1400163939196	Encapsulate field 'wieght'
+1400163988060	Encapsulate field 'answer'
+1400164474447	Rename field 'wieght'
+1400174174849	Rename method 'askQuestsion'
+1400180669303	Rename field 'LEARNING_MODE'
+1400223167669	Move compilation unit
+1400236060690	Infer generic type arguments
+1400236076584	Infer generic type arguments
+1400236541259	Encapsulate field 'value'
+1400239296645	Rename type 'InvalidParameters'
+1400257749777	Rename field 'o'
+1400263392612	Rename local variable 'string'
+1400266053982	Rename method 'setVariables'
+1400266227561	Rename type 'InvalidParametersException'
+1400273930700	Rename field 'par'
+1400299739809	Move compilation units
+1400299744901	Delete element
+1400321166082	Delete element
+1400321381857	Delete element
+1400393252450	Move compilation units
+1400393296899	Move compilation units
+1400393302309	Move compilation unit
+1400393358889	Move compilation units
+1400393368028	Rename package 'main.se.model'
+1400399806007	Rename method 'setExp'
+1400400589109	Encapsulate field 'answered'

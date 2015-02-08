@@ -1,0 +1,112 @@
+package org.fcl.main.functionblock;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import org.fcl.application.component.Parser;
+import org.fcl.application.component.ParsingError;
+import org.fcl.logging.Log;
+import org.fcl.main.misc.EditorError;
+import org.fcl.main.misc.ExpectedVariableNameException;
+import org.fcl.main.misc.ExpectedVariableTypeException;
+import org.fcl.main.misc.InvalidStartEndArrayException;
+import org.fcl.main.misc.MatcherResult;
+import org.fcl.main.misc.StringUtil;
+import org.fcl.main.misc.UnclosedTagException;
+import org.fcl.main.misc.UnexpectedTagFoundException;
+
+public class Function implements Parser {
+	public static final String FUNCTION_BLOCK_START = "function_block";
+	public static final String FUNCTION_BLOCK_END = "end_function_block";
+	String file;
+	ArrayList<FunctionBlock> blocks = new ArrayList<>();
+	final String FB_START = "function_block";
+	final String FB_END = "end_function_block";
+
+	public Function(String file) throws Exception {
+		this.file = file;
+		parse();
+	}
+
+	public Function() throws Exception {
+	}
+
+	protected void prepareFile(File file) throws FileNotFoundException {
+		Scanner sc = new Scanner(file, "UTF-8");
+		this.file = sc.useDelimiter("\\A").next();
+		sc.close();
+		parse();
+	}
+
+	@Override
+	public String getText() {
+		return file;
+	}
+
+	public void parseFunctionBlock(int position, String text)
+			throws InvalidStartEndArrayException, UnclosedTagException,
+			UnexpectedTagFoundException, ExpectedVariableNameException,
+			ExpectedVariableTypeException {
+		// MatcherResult name =
+		MatcherResult[] functionBlocks = StringUtil.findEnclosed(position,
+				new String[] { "var_input", "var_output", "fuzzify",
+						"defuzzify", "ruleblock" }, new String[] { "end_var",
+						"end_var", "end_fuzzify", "end_defuzzify",
+						"end_ruleblock" }, text);
+		System.out.println("function block content : ");
+		for (MatcherResult mr : functionBlocks) {
+			System.out.println(mr.startTag + " start=" + mr.start + " end="
+					+ mr.end + "\n" + mr.value
+					+ "\noooooooooooooooooooooooooo\n");
+			String[] vars = null;
+			if (mr.startTag.equalsIgnoreCase("var_input"))
+				vars = StringUtil.findAllVariables(mr.start, mr.value,
+						new String[] { "REAL" });
+			if (vars != null)
+				for (String v : vars) {
+					System.out.println(v);
+				}
+		}
+	}
+
+	public ParsingError parse() {
+
+		try {
+			if (this.file == null) {
+				return new ParsingError(0, "No or empty file selected");
+			}
+			file = StringUtil.removeComments(file);
+			file = StringUtil.removeNewLines(file);
+			MatcherResult[] functionBlocks = StringUtil.findEnclosed(0,
+					new String[] { FUNCTION_BLOCK_START },
+					new String[] { FUNCTION_BLOCK_END }, file);
+			Log.LOGGER.info("Splitting by function blocks :");
+			for (MatcherResult mr : functionBlocks) {
+				Log.LOGGER.info("block:\n" + mr.value + "\nstart: " + mr.start
+						+ ", end: " + mr.end);
+				System.out.println(mr.startTag);
+				System.out.println(mr.endTag);
+				this.parseFunctionBlock(mr.start, mr.value);
+			}
+			return new ParsingError();
+		} catch (Exception e) {
+			if (e instanceof EditorError) {
+				return new ParsingError(((EditorError) e).getPosition(),
+						((EditorError) e).getError());
+			}
+		}
+		return new ParsingError();
+	}
+
+	@Override
+	public void setFile(File f) {
+		try {
+			this.prepareFile(f);
+		} catch (Exception e) {
+			this.file = "";
+		}
+	}
+
+}

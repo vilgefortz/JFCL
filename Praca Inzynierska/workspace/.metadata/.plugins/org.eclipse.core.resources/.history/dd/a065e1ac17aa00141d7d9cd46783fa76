@@ -1,0 +1,4 @@
+package main.application.enviroment;
+
+public class Enviroment extends ArrayList<Variable>{
+}
