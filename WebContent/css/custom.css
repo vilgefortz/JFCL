@@ -8,6 +8,7 @@ body {
 	/* //background-image: url('../images/background/debut_dark.png'); */
 	border: solid 2px #000000;
 	min-height:600px;
+	height:auto;
 	border-radius: 5px;
 	color: #FFFFFF;
 	font-size: 12px;

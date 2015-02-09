@@ -9,12 +9,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import main.application.enviroment.Enviroment;
+import main.application.parser.JsonLogger;
 import main.application.parser.Parser;
 
 public class Application {
 	private Enviroment enviroment = new Enviroment ();
 	@Expose
-	public FunctionBlocks functionBlocks =new FunctionBlocks(); 
+	public FunctionBlocks functionBlocks =new FunctionBlocks();
+	@Expose
+	public JsonLogger logger; 
 	
 	public static void main (String [] args) throws FileNotFoundException {
 		Parser p = new Parser(new File ("test.fcl"));
@@ -34,5 +37,9 @@ public class Application {
 	}
 	public Enviroment getEnv() {
 		return enviroment;
+	}
+	public void setEnviroment(Enviroment env) {
+		this.enviroment= env;
+		
 	}
 }

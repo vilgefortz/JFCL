@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import main.application.enviroment.Enviroment;
 import main.application.parser.Parser;
 
 /**
@@ -49,6 +50,12 @@ public class Gateway extends HttpServlet {
 			PrintWriter pw = response.getWriter();
 			String body = request.getParameter("data");
 			Parser p = new Parser(body);
+			
+			Enviroment env = (Enviroment) session.getAttribute("env");
+			if (env == null) {
+				env=new Enviroment();
+			}
+			p.setEnviroment(env);
 			p.parse();
 			session.setAttribute("app", p.app);
 			pw.write(p.app.toJson());

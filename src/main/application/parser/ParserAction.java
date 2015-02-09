@@ -4,7 +4,7 @@ public class ParserAction {
 	private ParserBase parser;
 	private boolean found;
 	public boolean isFound() {
-		return found;
+		return this.parser.fatalState||found;
 	}
 	public ParserAction (ParserBase parser, int pos, boolean found) {
 		this.found = found;
@@ -12,6 +12,6 @@ public class ParserAction {
 		if (found) this.parser.pointer=pos;
 	}
 	public void execute (ParserFunction func) {
-		if (found) func.commit(this.parser);
+		if (!this.parser.fatalState && found) func.commit(this.parser);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import main.application.Application;
+import main.application.enviroment.Enviroment;
 import main.application.functionblock.FunctionBlock;
 import main.application.variables.InputVariable;
 import main.application.variables.OutputVariable;
@@ -33,24 +34,30 @@ public class Parser extends ParserBase {
 	}
 
 	public void parse() {
-		try {l
+		try {
 		this.eraseComments();
-		app = new Application();
 		if (this.doc.length==0) return;
-		expectForce("function_block").execute(
+		while (!expectEof ().isFound()) 
+		expectForce("function_block").execute(	
 				p1 -> {
 					FunctionBlock fb = new FunctionBlock(app);
 					fb.setEnv(app.getEnv());
 					app.functionBlocks.add(fb);
-					expectWord("function block name").execute(p2 -> {
+					expectWordForce("function block name").execute(p2 -> {
+						if (isKeyword(p2.word)) {
+							logFatal("function block name", "keyword " + p2.word);
+						}
 						fb.name = p2.word;
 					});
 					expectForce("var_input").execute(
 							p2-> {
 								while (!expect("end_var").isFound()) {
 									InputVariable var = new InputVariable(fb);
-									expectWordForce("variable name").execute(
+									expectWordForce("variable name or 'end_var'").execute(
 											p3 -> {
+												if (isKeyword(p3.word)) {
+													logFatal("variable name", "keyword " + p3.word);
+												}
 												var.setName(p3.word);
 												expectForce(":").execute(
 														p4 -> {
@@ -73,8 +80,11 @@ public class Parser extends ParserBase {
 							p2-> {
 								while (!expect("end_var").isFound()) {
 									OutputVariable var = new OutputVariable(fb);
-									expectWordForce("variable name").execute(
+									expectWordForce("variable name or 'end_var'").execute(
 											p3 -> {
+												if (isKeyword(p3.word)) {
+													logFatal("variable name", "keyword " + p3.word);
+												}
 												var.setName(p3.word);
 												expectForce(":").execute(
 														p4 -> {
@@ -93,13 +103,38 @@ public class Parser extends ParserBase {
 											});
 								}
 							});
-
+					expectForce("end_function_block");
 				});
 		// app.saveJSON();
 		}
 		catch (Exception e) {
-			//don't have to catch any Exceptions - error handling via Error document
+			this.logger.fatal.add(new LogEntry (e.toString(), this.countLines(pointer), pointer, this.countLinepos(pointer)));
+			e.printStackTrace();
 		}
-		Console.printLog();
+		this.app.logger=this.logger;
+	}
+
+	private ParserAction expectEof() {
+		this.moveOnTrailing();
+		ParserAction pa = new ParserAction (this, pointer,pointer>=doc.length-1);
+		return pa;
+	}
+
+	private boolean isKeyword(String word) {		
+		String [] keywords = new String [] {
+			"function_block", "end_function_block", "var_input", "var_output", "end_var"
+		};
+		
+		for (String k : keywords) {
+			if (k.equalsIgnoreCase(word)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void setEnviroment(Enviroment env) {
+		this.app.setEnviroment(env);
+		
 	}
 }
