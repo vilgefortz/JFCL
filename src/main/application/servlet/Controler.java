@@ -1,4 +1,4 @@
-package website;
+package main.application.servlet;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,13 +6,13 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import main.application.Application;
-import main.application.enviroment.Enviroment;
 import main.application.functionblock.FunctionBlock;
+import main.application.variables.BaseFunctionVariable;
 import main.application.variables.InputVariable;
 import main.application.variables.OutputVariable;
 
 public class Parser extends ParserBase {
+	public BaseFunctionVariable var;
 	public Parser() {
 
 	}
@@ -103,38 +103,142 @@ public class Parser extends ParserBase {
 											});
 								}
 							});
+					expectForce("fuzzify").execute(
+							p2-> {
+								do {
+									 expectWordForce("variable name'").execute( p3 -> {
+										 if (isKeyword(p3.word)) {
+												logFatal("variable name", "keyword " + p3.word);
+										 }
+										 String varName = p3.word;
+										try { 
+											var = fb.input.getInputVariable(varName);
+										} catch (Exception e) {
+											this.rollbackPointer();
+											logFatal (e.getMessage());
+											e.printStackTrace();
+										}
+										 while (!p2.expect("end_fuzzify").isFound()) {
+											 expectForce("term").execute(p4-> {
+												 expectWordForce("term name'").execute( p5 -> {
+													 if (isKeyword(p5.word)) {
+															logFatal("variable name", "keyword " + p3.word);
+													 }
+													 String termName = p5.word;
+													 expectForce (":=").execute(p6->{
+														 expectRegForce("(?s).*?;", "term definition").execute(p7-> {
+																try {
+																	var.addTerm (this.app.termFactory.generateTerm (termName,p7.word));
+																} catch (Exception e) {
+																	this.rollbackPointer();
+																	logFatal (e.getMessage());
+																	e.printStackTrace();					}
+																
+														 });
+													 });
+												 });
+											 });
+										 }
+									 });
+								} while (expect("fuzzify").isFound() && !this.fatalState);
+							});
+					expectForce("defuzzify").execute(
+							p2-> {
+								do {
+									 expectWordForce("variable name'").execute( p3 -> {
+										 if (isKeyword(p3.word)) {
+												logFatal("variable name", "keyword " + p3.word);
+										 }
+										 String varName = p3.word;
+										 try {
+											var = fb.output.getOutputVariable(varName);
+										} catch (Exception e) {
+											this.rollbackPointer();
+											logFatal (e.getMessage());
+											e.printStackTrace();
+					}
+										 while (!p2.expect("end_defuzzify").isFound()) {
+											 expectOneOfForce(new String [] {"term", "accu", "method", "default"},
+													 "term or defizzify details").execute(p4-> {
+												 if (p4.word.equalsIgnoreCase("term")) {
+												 expectWordForce("term name'").execute( p5 -> {
+													 if (isKeyword(p5.word)) {
+															logFatal("variable name", "keyword " + p3.word);
+													 }
+													 String termName = p5.word;
+													 expectForce (":=").execute(p6->{
+														 expectRegForce("(?s).*?;", "term definition").execute(p7-> {
+															 try {
+																var.addTerm (this.app.termFactory.generateTerm (termName,p7.word));
+															} catch (Exception e) {
+																this.rollbackPointer();
+																logFatal (e.getMessage());
+																e.printStackTrace();
+															}
+														 });
+													 });
+												 });
+												 }
+												 if (p4.word.equalsIgnoreCase("accu")) {
+													 expectForce (":").execute(p6->{ 
+														 expectOneOfForce(app.getAccuMethodsNames(), "Accumulation method").execute(p7 -> {
+															 String method = p7.word;
+															 expectForce(";").execute(
+																		p8 -> {
+																			try {
+																				((OutputVariable)var).setAccuMethod(method);
+																			} catch (Exception e) {
+																				this.rollbackPointer();
+																				logFatal (e.getMessage());
+																				e.printStackTrace();;
+																			}
+																		});
+														 });
+													 });
+												 }
+												 if (p4.word.equalsIgnoreCase("method")) {
+													 expectForce (":").execute(p6->{ 
+														 expectOneOfForce(app.getDeffuMethodsNames(), "Defuzzification method").execute(p7 -> {
+															 String method = p7.word;
+															 expectForce(";").execute(
+																		p8 -> {
+																			try {
+																				((OutputVariable)var).setDefuzzificationMethod(method);
+																			} catch (Exception e) {
+																				this.rollbackPointer();
+																				logFatal (e.getMessage());
+																				e.printStackTrace();;
+																			}
+																		});
+														 });
+													 });
+												 }
+												 if (p4.word.equalsIgnoreCase("default")) {
+													 expectForce(":=").execute(p5-> {
+														 expectRegForce("-?[0-9]*\\.?[0-9]*", "Numeric value").execute(p6 -> {
+															 double val = Double.parseDouble(p6.word);
+															 	expectForce(";").execute(p7-> { 
+															 		var.setDefault (val);
+															 });
+														 });
+													 });
+																 
+												 }
+											 });
+										 }
+									 });
+								} while (expect("defuzzify").isFound() && !this.fatalState);
+							});
+							
 					expectForce("end_function_block");
 				});
 		// app.saveJSON();
 		}
 		catch (Exception e) {
-			this.logger.fatal.add(new LogEntry (e.toString(), this.countLines(pointer), pointer, this.countLinepos(pointer)));
+			this.rollbackPointer();
+			this.logger.fatal.add(new LogEntry (e.getMessage(), this.countLines(getPointer()), getPointer(), this.countLinepos(getPointer())));
 			e.printStackTrace();
 		}
 		this.app.logger=this.logger;
-	}
-
-	private ParserAction expectEof() {
-		this.moveOnTrailing();
-		ParserAction pa = new ParserAction (this, pointer,pointer>=doc.length-1);
-		return pa;
-	}
-
-	private boolean isKeyword(String word) {		
-		String [] keywords = new String [] {
-			"function_block", "end_function_block", "var_input", "var_output", "end_var"
-		};
-		
-		for (String k : keywords) {
-			if (k.equalsIgnoreCase(word)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void setEnviroment(Enviroment env) {
-		this.app.setEnviroment(env);
-		
 	}
 }

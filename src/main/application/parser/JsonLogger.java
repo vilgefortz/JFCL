@@ -13,7 +13,7 @@ public class JsonLogger {
 	public List<LogEntry> info = new ArrayList<LogEntry>();
 	@Expose
 	public List<LogEntry> fatal = new ArrayList<LogEntry>();
-
+	
 	public String toJson() throws FileNotFoundException {
 
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()

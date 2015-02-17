@@ -22,6 +22,12 @@ public class FunctionBlock {
 		this.app = app;
 		this.env = app.getEnv();
 	}
+	public Application getApp() {
+		return app;
+	}
+	public void setApp(Application app) {
+		this.app = app;
+	}
 	public Enviroment getEnv() {
 		return env;
 	}

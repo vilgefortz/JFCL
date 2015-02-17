@@ -1,7 +1,11 @@
 package main.application.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.application.enviroment.Variable;
 import main.application.functionblock.FunctionBlock;
+import main.application.variable.term.Term;
 
 import com.google.gson.annotations.Expose;
 
@@ -13,6 +17,8 @@ public class BaseFunctionVariable {
 	private String type;
 	@Expose
 	protected Variable var;
+	@Expose
+	private List<Term> terms = new ArrayList<Term> ();
 
 	public BaseFunctionVariable() {
 		super();
@@ -37,11 +43,19 @@ public class BaseFunctionVariable {
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.name.equalsIgnoreCase(((InputVariable) obj).name);
+		return this.name.equalsIgnoreCase(((BaseFunctionVariable) obj).name);
 	}
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public void addTerm(Term term) {	
+		this.terms.add(term);
+	}
+
+	public void setDefault(double val) {
+		this.setValue(val);
 	}
 
 }

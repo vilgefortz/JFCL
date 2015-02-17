@@ -30,6 +30,7 @@
 <script src="scripts/lib/ace/src-noconflict/ace.js"
 	type="text/javascript" charset="utf-8"></script>
 <script>
+	var mainData;
 	var editNotification = false;
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/monokai");
@@ -40,14 +41,17 @@
 				$.post("Gateway?action=generateJson", {
 					data : editor.getSession().getValue()
 				}, function(value) {
+					
 					$("#code").text(value);
 					var app = $.parseJSON(value);
+					mainData=app;
 					$("#fatal").text("");
 					$("#log").text("");
 					$("#log").append("Fatal:<br>");
 					$.each(app.logger.fatal, function(key, value) {
 						
-						$("#fatal").append(value.entry + "<br>");
+						$("#fatal").append(value.entry + ", at line : " + value.line +
+								" cursor pos : " + value.linepos + "<br>");
 					});
 					$("#log").append("Info:<br>");
 					$.each(app.logger.info, function(key, value) {
