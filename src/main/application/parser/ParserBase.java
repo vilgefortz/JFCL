@@ -185,13 +185,25 @@ public class ParserBase {
 		return pa;
 	}
 
+	public ParserAction expectWordOrNumberForce(String name) {
+		ParserAction pa = expectWordOrNumber(name);
+		if (!pa.isFound()) {
+			logFatal(name, this.getFirstText());
+		}
+		return pa;
+	}
 	public ParserAction expectWord(String name) {
 		lastPointer=pointer;
 		return this.expectReg("[a-z][a-z0-9_]*", name);
 	}
+	public ParserAction expectWordOrNumber(String name) {
+		lastPointer=pointer;
+		return this.expectReg("[a-z0-9_]+", name);
+	}
 
 	private String implode(String connector, String[] list) {
 		if (list.length==0) return "";
+		
 		StringBuilder sb = new StringBuilder();
 		for (String l : list) {
 			sb.append(l).append(connector);

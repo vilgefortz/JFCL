@@ -7,7 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import main.application.functionblock.FunctionBlock;
+import main.application.functionblock.Ruleblock;
 import main.application.variables.BaseFunctionVariable;
+import main.application.variables.InlineVariable;
 import main.application.variables.InputVariable;
 import main.application.variables.OutputVariable;
 
@@ -70,6 +72,33 @@ public class Parser extends ParserBase {
 																		expectForce(";").execute(
 																				p6 -> {
 																					fb.input.add(var);
+																				});
+																	});
+														});
+											});
+								}
+							});
+					expect("var").execute(
+							p2-> {
+								while (!expect("end_var").isFound()) {
+									InlineVariable var = new InlineVariable(fb);
+									expectWordForce("variable name or 'end_var'").execute(
+											p3 -> {
+												if (isKeyword(p3.word)) {
+													logFatal("variable name", "keyword " + p3.word);
+												}
+												var.setName(p3.word);
+												expectForce(":").execute(
+														p4 -> {
+															expectOneOfForce(
+																	ApplcationConfig
+																			.getVariableTypes(),
+																	"variable type").execute(
+																	p5 -> {
+																		var.setType(p5.word);
+																		expectForce(";").execute(
+																				p6 -> {
+																					fb.inline.add(var);
 																				});
 																	});
 														});
@@ -151,7 +180,7 @@ public class Parser extends ParserBase {
 										 }
 										 String varName = p3.word;
 										 try {
-											var = fb.output.getOutputVariable(varName);
+											var = fb.getRightVariable(varName);
 										} catch (Exception e) {
 											this.rollbackPointer();
 											logFatal (e.getMessage());
@@ -229,7 +258,61 @@ public class Parser extends ParserBase {
 									 });
 								} while (expect("defuzzify").isFound() && !this.fatalState);
 							});
-							
+					expectForce("ruleblock").execute(
+							p2-> {
+								do {
+									 expectWordForce("ruleblock name'").execute( p3 -> {
+										 if (isKeyword(p3.word)) {
+												logFatal("ruleblock name", "keyword " + p3.word);
+										 }
+										 String ruleBlockName = p3.word;
+										 Ruleblock rb = new Ruleblock(fb);
+										 rb.setName (ruleBlockName);
+										 fb.ruleblocks.add(rb);
+										 while (!p2.expect("end_ruleblock").isFound()) {
+											 expectOneOfForce(new String [] {"rule", "and"},
+													 "rule or settings").execute(p4-> {
+												if (p4.word.equalsIgnoreCase("and")) {
+													expectForce(":").execute(p5->{
+														expectOneOfForce(app.getAndMethodsNames(), "and methods").execute(p6->{
+															String methodName = p6.word;
+															if (isKeyword(methodName)) {
+																logFatal("and method name", "keyword " + methodName);
+															}
+															expectForce(";").execute(p7->{
+																try {
+																	rb.setAndMethod (app.getAndMethod(methodName));
+																} catch (Exception e) {
+																	this.rollbackPointer();
+																	logFatal (e.getMessage());
+																	e.printStackTrace();;
+																}
+															});
+														});
+													});
+												}
+												if (p4.word.equalsIgnoreCase("rule")) {
+													expectWordOrNumberForce("Rule name or number").execute(p5->{
+														String name = p5.word;
+														expectForce(":").execute(p6->{
+															expectRegForce("(?s).*?;", "rule definition").execute(p7-> {
+																try {
+																rb.addRule(rb.ruleFactory.fromString(name,p7.word));
+															} catch (Exception e) {
+																this.rollbackPointer();
+																logFatal (e.getMessage());
+																e.printStackTrace();;
+															}
+													});
+													});
+													});
+												}
+										 });
+										 }
+									 });
+								} while (expect("ruleblock").isFound() && !this.fatalState);
+							});
+		
 					expectForce("end_function_block");
 				});
 		// app.saveJSON();

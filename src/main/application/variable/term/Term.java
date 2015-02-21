@@ -47,4 +47,12 @@ public abstract class Term {
 	public void setMax(double max) {
 		this.max = max;
 	}
+	public static Term getDummy(String word) {
+		return new Term(word) {
+			@Override
+			public double fun(double val) {
+				return 0;
+			}
+		};
+	}
 }

@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import main.application.accumulation.AccumulationMethod;
 import main.application.accumulation.AccumulationMethodNotRecognisedException;
 import main.application.accumulation.DefaultAccumulationMethods;
+import main.application.andmethods.AndMethod;
+import main.application.andmethods.AndMethodNotFoundException;
+import main.application.andmethods.DefaultAndMethods;
 import main.application.deffuzification.DefaultDeffuzificationMethods;
 import main.application.deffuzification.DefuzzificationMethod;
 import main.application.deffuzification.DefuzzificationMethodNotRecognisedException;
@@ -13,6 +16,7 @@ import main.application.enviroment.Enviroment;
 import main.application.parser.JsonLogger;
 import main.application.parser.Parser;
 import main.application.parser.ParserBase;
+import main.application.rules.DefaultRuleFactory;
 import main.application.variable.term.DefaultTermFactory;
 import main.application.variable.term.TermFactory;
 
@@ -34,6 +38,7 @@ public class Application {
 	public TermFactory termFactory = new DefaultTermFactory (this);
 	private DefaultAccumulationMethods accuMethods = new DefaultAccumulationMethods();
 	private DefaultDeffuzificationMethods deffuMethods = new DefaultDeffuzificationMethods(); 
+	private DefaultAndMethods andMethods = new DefaultAndMethods ();
 	
 	public static void main (String [] args) throws FileNotFoundException {
 		Parser p = new Parser(new File ("test.fcl"));
@@ -74,4 +79,11 @@ public class Application {
 	public DefuzzificationMethod getDefuzzificationMethod(String method) throws DefuzzificationMethodNotRecognisedException {
 		return this.deffuMethods.get(method);
 	}
+	public AndMethod getAndMethod(String name) throws AndMethodNotFoundException {
+		return this.andMethods.getMethod(name);
+	}
+	public String[] getAndMethodsNames() {
+		return this.andMethods.getNames();
+	}
 }
+

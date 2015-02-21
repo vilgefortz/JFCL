@@ -6,6 +6,7 @@ import java.util.List;
 import main.application.enviroment.Variable;
 import main.application.functionblock.FunctionBlock;
 import main.application.variable.term.Term;
+import main.application.variable.term.TermDeclarationErrorException;
 
 import com.google.gson.annotations.Expose;
 
@@ -22,6 +23,10 @@ public class BaseFunctionVariable {
 
 	public BaseFunctionVariable() {
 		super();
+	}
+
+	public BaseFunctionVariable(String name2) {
+		this.name  = name2;
 	}
 
 	public String getName() {
@@ -50,12 +55,21 @@ public class BaseFunctionVariable {
 		this.type = type;
 	}
 
-	public void addTerm(Term term) {	
+	public void addTerm(Term term) throws TermDeclarationErrorException {
+		if (this.hasTerm (term.getName())) throw new TermDeclarationErrorException("Term alerady exists");
 		this.terms.add(term);
 	}
 
 	public void setDefault(double val) {
 		this.setValue(val);
+	}
+
+	public boolean hasTerm(String word) {
+		return this.terms.contains(Term.getDummy (word));
+	}
+
+	public Term getTerm(String word) {
+		return this.terms.get(this.terms.indexOf(Term.getDummy(word)));
 	}
 
 }
