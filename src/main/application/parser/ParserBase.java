@@ -12,7 +12,7 @@ public class ParserBase {
 
 	public String document;
 	public char[] doc;
-	private int pointer = 0;
+	protected int pointer = 0;
 	public int getPointer() {
 		return pointer;
 	}

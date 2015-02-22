@@ -80,6 +80,11 @@ public class Parser extends ParserBase {
 							});
 					expect("var").execute(
 							p2-> {
+								if (expect ("_output").isFound()) {
+									rollbackPointer();
+									pointer -=3;
+								}
+								else 
 								while (!expect("end_var").isFound()) {
 									InlineVariable var = new InlineVariable(fb);
 									expectWordForce("variable name or 'end_var'").execute(

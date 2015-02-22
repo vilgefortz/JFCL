@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import main.application.andmethods.AndMethod;
 import main.application.functionblock.FunctionBlock;
 import main.application.functionblock.Ruleblock;
+import main.application.parser.utils.ParsingUtils;
 import main.application.variable.term.Term;
 import main.application.variables.BaseFunctionVariable;
 import main.application.variables.InlineVariableNotFoundException;
@@ -58,28 +59,20 @@ public class DefaultActionFactory {
 
 	private Action parseSingleExpression(String text, Rule r) throws RuleParsingException, InlineVariableNotFoundException, InputVariableNotFoundException {
 		FunctionBlock fb = this.ruleblock.getFunctionBlock();
-		String varName = this.getFirstWord (text);
+		String varName = ParsingUtils.getFirstWord (text);
 		if (varName.equals("")) throw new RuleParsingException("Expected variable name");
 		BaseFunctionVariable v = fb.getLeftVariable(varName);
 		logger.info("Found left hand variable " + varName);
 		r.addDepenedency (v);
-		String is = this.getFirstWord(text=text.substring(varName.length()).trim());
+		String is = ParsingUtils.getFirstWord(text=text.substring(varName.length()).trim());
 		if (!is.equalsIgnoreCase(IS)) throw new RuleParsingException("Expected keyword 'is' after variable '" + varName + "'");
 		String rightSide = text=text.substring(IS.length()).trim();
 		Term t = this.parseTerm (rightSide,v,r);
-		return new Action (){
-			@Expose
-			Term term = t;
-			@Expose 
-			BaseFunctionVariable var = v;
-			@Override
-			public double getValue() {
-				return t.fun(var.getValue());
-			}
-		};	
+		return new TermAction (t,v);
 	}
+	
 	private Term parseTerm(String text, BaseFunctionVariable v, Rule r) throws RuleParsingException {
-		String word = getFirstWord(text = text.trim());
+		String word = ParsingUtils.getFirstWord(text = text.trim());
 		if (v.hasTerm (word)) {
 			String w =text.substring(word.length()).trim();
 			if (!w.equals("")) throw new RuleParsingException("Unexpected '" + w + "' after term '" + word);
@@ -88,20 +81,6 @@ public class DefaultActionFactory {
 		throw new RuleParsingException("Term '" + word + "' is not defined for variable '" + v.getName() + "'");
 	}
 	private static final Logger logger = Logger.getLogger("DefaultActionFactory");
-	
-	private String getFirstWord(String text,String regex) {
-			regex = "(?is)^" + regex;
-			text=text.trim();
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(text);
-			String result = "";
-			if (matcher.find())
-				result = matcher.group();
-			return result;
-		}
-	private String getFirstWord (String text) {
-		return this.getFirstWord(text, "[a-z][a-z0-9_]*");
-	}
 	
 	private int findFirstNotEnclosed(String text,String main) throws RuleParsingException {
 		Logger.getGlobal().info("Searching for '" + text + "' in '" + main+ "'.");

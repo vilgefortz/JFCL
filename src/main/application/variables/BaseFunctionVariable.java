@@ -72,4 +72,5 @@ public class BaseFunctionVariable {
 		return this.terms.get(this.terms.indexOf(Term.getDummy(word)));
 	}
 
+
 }

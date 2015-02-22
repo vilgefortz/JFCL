@@ -1,7 +1,7 @@
 package main.application.rules;
 
-public interface  Action {
+public abstract class  Action {
 
-	public double getValue();
+	public abstract double getValue();
 
 }
