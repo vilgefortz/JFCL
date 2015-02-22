@@ -1,8 +1,6 @@
 package main.application.rules;
 
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import main.application.andmethods.AndMethod;
 import main.application.functionblock.FunctionBlock;
@@ -12,8 +10,6 @@ import main.application.variable.term.Term;
 import main.application.variables.BaseFunctionVariable;
 import main.application.variables.InlineVariableNotFoundException;
 import main.application.variables.InputVariableNotFoundException;
-
-import com.google.gson.annotations.Expose;
 
 public class DefaultActionFactory {
 	protected String IS = "is";

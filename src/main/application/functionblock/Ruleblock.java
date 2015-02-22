@@ -2,11 +2,9 @@ package main.application.functionblock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import main.application.andmethods.AndMethod;
 import main.application.andmethods.DefaultAndMethods;
-import main.application.enviroment.Enviroment;
 import main.application.rules.DefaultRuleFactory;
 import main.application.rules.Rule;
 

@@ -42,7 +42,7 @@
 					data : editor.getSession().getValue()
 				}, function(value) {
 					
-					//$("#code").text(value);
+					$("#code").text(value);
 					var app = $.parseJSON(value);
 					mainData=app;
 					$("#fatal").text("");
@@ -53,10 +53,10 @@
 						$("#fatal").append(value.entry + ", at line : " + value.line +
 								" cursor pos : " + value.linepos + "<br>");
 					});
-					/*$("#log").append("Info:<br>");
+					$("#log").append("Info:<br>");
 					$.each(app.logger.info, function(key, value) {
 						$("#log").append(value.entry + "<br>");
-					});*/
+					});
 				});
 				editNotification = false;
 			}, 	1000);

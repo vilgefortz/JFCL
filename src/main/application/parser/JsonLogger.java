@@ -9,7 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 public class JsonLogger {
-	@Expose
+	//@Expose
 	public List<LogEntry> info = new ArrayList<LogEntry>();
 	@Expose
 	public List<LogEntry> fatal = new ArrayList<LogEntry>();
