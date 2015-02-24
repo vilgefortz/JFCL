@@ -54,13 +54,12 @@ public class Parser extends ParserBase {
 					expectForce("var_input").execute(
 							p2-> {
 								while (!expect("end_var").isFound()) {
-									InputVariable var = new InputVariable(fb);
 									expectWordForce("variable name or 'end_var'").execute(
 											p3 -> {
 												if (isKeyword(p3.word)) {
 													logFatal("variable name", "keyword " + p3.word);
 												}
-												var.setName(p3.word);
+												InputVariable var = new InputVariable(p3.word,fb);
 												expectForce(":").execute(
 														p4 -> {
 															expectOneOfForce(
@@ -86,13 +85,12 @@ public class Parser extends ParserBase {
 								}
 								else 
 								while (!expect("end_var").isFound()) {
-									InlineVariable var = new InlineVariable(fb);
 									expectWordForce("variable name or 'end_var'").execute(
 											p3 -> {
 												if (isKeyword(p3.word)) {
 													logFatal("variable name", "keyword " + p3.word);
 												}
-												var.setName(p3.word);
+												InlineVariable var = new InlineVariable(p3.word,fb);
 												expectForce(":").execute(
 														p4 -> {
 															expectOneOfForce(
@@ -113,13 +111,13 @@ public class Parser extends ParserBase {
 					expectForce("var_output").execute(
 							p2-> {
 								while (!expect("end_var").isFound()) {
-									OutputVariable var = new OutputVariable(fb);
+									
 									expectWordForce("variable name or 'end_var'").execute(
 											p3 -> {
 												if (isKeyword(p3.word)) {
 													logFatal("variable name", "keyword " + p3.word);
 												}
-												var.setName(p3.word);
+												OutputVariable var = new OutputVariable(p3.word,fb);
 												expectForce(":").execute(
 														p4 -> {
 															expectOneOfForce(

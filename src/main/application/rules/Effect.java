@@ -1,5 +1,7 @@
 package main.application.rules;
 
+import java.util.logging.Logger;
+
 import main.application.variable.term.Term;
 import main.application.variables.BaseFunctionVariable;
 import main.application.variables.OutputVariable;
@@ -18,8 +20,9 @@ public abstract class Effect {
 	}
 
 	public abstract Term getTerm(double level);
-
+	private static Logger l = Logger.getGlobal();
 	public void execute(double level) {
+		l.info("accumulating term " + this.getTerm(level).getName() + " with level " + level);
 		this.var.accumulateTerm(this.getTerm(level));
 	}
 }

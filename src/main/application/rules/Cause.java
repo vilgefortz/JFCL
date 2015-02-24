@@ -6,4 +6,9 @@ public class Cause {
 	@Expose
 	public Action action;
 
+	public Action getAction() {
+		return action;
+		
+	}
+
 }

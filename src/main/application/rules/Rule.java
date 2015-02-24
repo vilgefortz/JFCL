@@ -1,13 +1,19 @@
 package main.application.rules;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import main.application.variables.BaseFunctionVariable;
 
 import com.google.gson.annotations.Expose;
 
-public class Rule {
+public class Rule implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8303989672422512125L;
 	@Expose
 	private String text;
 	@Expose
@@ -18,7 +24,11 @@ public class Rule {
 	List<Effect> effect = new ArrayList<Effect> ();
 	private List<BaseFunctionVariable> dependend = new ArrayList<BaseFunctionVariable>();
 	private List<BaseFunctionVariable> affected = new ArrayList<BaseFunctionVariable>();
-
+	private String id;
+	@Override
+	public boolean equals(Object obj) {
+		return this.id.equals(((Rule)obj).id);
+	}
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -29,6 +39,8 @@ public class Rule {
 
 	public Rule(String name) {
 		this.name = name;
+		Random r  = new Random();
+		this.id = name + r.nextLong();
 	}
 
 	public Rule(String name, String text) {
@@ -52,4 +64,18 @@ public class Rule {
 	public boolean dependsOn(BaseFunctionVariable var) {
 		return this.dependend.contains(new BaseFunctionVariable(var.getName()));
 	}
+
+	public Cause getCause() {
+		return cause;
+	}
+
+	public List<Effect> getEffects() {
+		return effect;
+	}
+
+	public List<BaseFunctionVariable> getAffected() {
+		return this.affected;
+	}
+
+	
 }

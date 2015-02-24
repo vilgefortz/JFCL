@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import main.application.Application;
 import main.application.enviroment.Enviroment;
+import main.application.enviroment.Variable;
 
 public class ParserBase {
 
@@ -281,9 +282,13 @@ public class ParserBase {
 	}
 
 	public void setEnviroment(Enviroment env) {
-		this.app.setEnviroment(env);
-		
-	}
+		for (Variable v : env) {
+			this.app.getEnv().getVariable(v.getName()).setValue(v.getValue());
+		}
+		for (Variable v : this.app.getEnv()) {
+			v.forceCalc();
+		}
+ 	}
 
 	public String hasKeyword(String word) {
 		String w = null;

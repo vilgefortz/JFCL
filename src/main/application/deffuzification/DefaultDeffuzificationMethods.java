@@ -9,7 +9,7 @@ import main.application.accumulation.MaxMethod;
 
 public class DefaultDeffuzificationMethods extends ArrayList<DefuzzificationMethod>{
 	public DefaultDeffuzificationMethods() {
-		this.add (new CogsMethod("cogs"));
+		this.add (new CogMethod("cog"));
 	}
 	public String[] getNames() {
 		List<String> l = new ArrayList<String> ();
@@ -21,7 +21,7 @@ public class DefaultDeffuzificationMethods extends ArrayList<DefuzzificationMeth
 
 	public DefuzzificationMethod get(String method) throws DefuzzificationMethodNotRecognisedException  {
 		try {
-			return this.get(this.indexOf(new DefuzzificationMethod(method)));
+			return this.get(this.indexOf(DefuzzificationMethod.getDummy(method)));
 		} catch (Exception e) {
 			throw new DefuzzificationMethodNotRecognisedException (method);
 		}

@@ -11,9 +11,8 @@ public abstract class Term {
 	protected double min;
 	@Expose
 	protected double max;
-	public Term () {
-		
-	}
+	public abstract double getMax ();
+	public abstract double getMin();
 	public Term (String name) {
 		this.name=name;
 	}
@@ -35,14 +34,8 @@ public abstract class Term {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public double getMin() {
-		return min;
-	}
 	public void setMin(double min) {
 		this.min = min;
-	}
-	public double getMax() {
-		return max;
 	}
 	public void setMax(double max) {
 		this.max = max;
@@ -51,6 +44,14 @@ public abstract class Term {
 		return new Term(word) {
 			@Override
 			public double fun(double val) {
+				return 0;
+			}
+			@Override
+			public double getMax() {
+				return 0;
+			}
+			@Override
+			public double getMin() {
 				return 0;
 			}
 		};

@@ -18,7 +18,7 @@ public class DefaultAccumulationMethods extends ArrayList<AccumulationMethod>{
 
 	public AccumulationMethod get(String method) throws AccumulationMethodNotRecognisedException {
 		try {
-			return this.get(this.indexOf(new AccumulationMethod(method)));
+			return this.get(this.indexOf(AccumulationMethod.getDummy(method)));
 		} catch (Exception e) {
 			throw new AccumulationMethodNotRecognisedException (method);
 		}

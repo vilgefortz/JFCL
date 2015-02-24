@@ -60,6 +60,7 @@ public class DefaultActionFactory {
 		BaseFunctionVariable v = fb.getLeftVariable(varName);
 		logger.info("Found left hand variable " + varName);
 		r.addDepenedency (v);
+		v.addDependendRule(r);
 		String is = ParsingUtils.getFirstWord(text=text.substring(varName.length()).trim());
 		if (!is.equalsIgnoreCase(IS)) throw new RuleParsingException("Expected keyword 'is' after variable '" + varName + "'");
 		String rightSide = text=text.substring(IS.length()).trim();
